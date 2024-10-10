@@ -3,9 +3,9 @@
 
 Modify to provide your information.   
 
-* Name : ???
-* email : ???
-* GitHub user name: ???
+* Name : Binh Nguyen
+* email : duc_binh.nguyen@okstate.edu
+* GitHub user name: ducbinh2411
 
 ## Notes and comments
 
