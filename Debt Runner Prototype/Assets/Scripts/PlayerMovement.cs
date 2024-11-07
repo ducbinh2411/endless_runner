@@ -4,20 +4,26 @@ public class PlayerMovement : MonoBehaviour
 {
     public float jumpForce = 10f;      // Force applied to the player for jumping
     public float moveSpeed = 5f;       // Speed for left and right movement
-    private Rigidbody rb;              // Rigidbody component of the player
+    public float gravityModifier = 1f; // Gravity modifier to adjust gravity strength
+    public bool isOnGround = true;     // Checks if the player is on the ground
+    private Rigidbody playerRb;        // Rigidbody component of the player
 
     void Start()
     {
         // Get the Rigidbody component attached to the player
-        rb = GetComponent<Rigidbody>();
+        playerRb = GetComponent<Rigidbody>();
+
+        // Modify gravity if needed
+        Physics.gravity *= gravityModifier;
     }
 
     void Update()
     {
-        // Check if the spacebar is pressed for jumping
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Jumping logic
+        if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
         {
-            Jump();
+            playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isOnGround = false;
         }
 
         // Left and right movement
@@ -36,14 +42,17 @@ public class PlayerMovement : MonoBehaviour
         // Apply left or right movement if either key is pressed
         if (moveDirection != 0f)
         {
-            Vector3 newPosition = rb.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
-            rb.MovePosition(newPosition);
+            Vector3 newPosition = playerRb.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
+            playerRb.MovePosition(newPosition);
         }
     }
 
-    void Jump()
+    private void OnCollisionEnter(Collision collision)
     {
-        // Apply an upward force to the Rigidbody for jumping
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        // Check if the player hits the ground to enable jumping again
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isOnGround = true;
+        }
     }
 }
