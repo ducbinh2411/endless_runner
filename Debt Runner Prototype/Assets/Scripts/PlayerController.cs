@@ -1,11 +1,12 @@
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public float jumpForce = 10f;      // Force applied to the player for jumping
     public float moveSpeed = 5f;       // Speed for left and right movement
     public float gravityModifier = 1f; // Gravity modifier to adjust gravity strength
     public bool isOnGround = true;     // Checks if the player is on the ground
+    public bool gameOver = false;
     private Rigidbody playerRb;        // Rigidbody component of the player
 
     void Start()
@@ -53,6 +54,9 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isOnGround = true;
+        } else if (collision.gameObject.CompareTag("Obstacle")) {
+            gameOver = true;
+            Debug.Log("Game Over!");
         }
     }
 }
