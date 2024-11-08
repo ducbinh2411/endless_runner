@@ -1,30 +1,11 @@
-/*using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ObstacleMoving : MonoBehaviour
 {
-    private float speed = 30;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        transform.Translate(Vector3.left * Time.deltaTime * speed);
-    }
-}*/
-
-
-
-using UnityEngine;
-
-public class ObstacleMoving : MonoBehaviour
-{
     [SerializeField] private float speed = 30f; // Expose speed to adjust in Inspector
+    private float destroyBound = -10f;          // X-position where the obstacle will be destroyed
 
     private PlayerController playerControllerScript;
 
@@ -53,8 +34,8 @@ public class ObstacleMoving : MonoBehaviour
         // Move obstacle to the left
         transform.Translate(Vector3.left * Time.deltaTime * speed);
 
-        // Optional: Destroy obstacle if it moves off-screen
-        if (transform.position.x < -10) // Adjust -10 to your scene boundary
+        // Destroy obstacle if it moves out of bounds
+        if (transform.position.z < destroyBound)
         {
             Destroy(gameObject);
         }
