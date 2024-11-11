@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public bool isOnGround = true;     // Checks if the player is on the ground
     public bool gameOver = false;
     private Rigidbody playerRb;        // Rigidbody component of the player
+    internal bool gameStarted;
 
     void Start()
     {
