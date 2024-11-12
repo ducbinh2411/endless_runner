@@ -3,13 +3,14 @@ using UnityEngine;
 public class CoinSpawner : MonoBehaviour
 {
     public GameObject coinPrefab;               // The coin prefab to spawn
-    public float spawnInterval = 3f;            // Time interval between coin spawns
+    public float spawnInterval = 10f;           // Time interval between coin spawns
     public float spawnRangeX = 5f;              // Range on the X-axis for random spawn positions
     public float minSpawnDistanceZ = 10f;       // Minimum distance in front of the player to avoid close spawns
     public float maxSpawnDistanceZ = 45f;       // Maximum distance in front of the player to spawn coins
     public float minSpawnHeightY = 2f;          // Minimum Y position for coins to appear
     public float maxSpawnHeightY = 6f;          // Maximum Y position for coins to appear
     private Transform playerTransform;          // Reference to the player's position
+    private PlayerController playerControllerScript; // Reference to the PlayerController for game over status
 
     private void Start()
     {
@@ -18,6 +19,7 @@ public class CoinSpawner : MonoBehaviour
         if (playerObject != null)
         {
             playerTransform = playerObject.transform;
+            playerControllerScript = playerObject.GetComponent<PlayerController>();
         }
         else
         {
@@ -30,6 +32,13 @@ public class CoinSpawner : MonoBehaviour
 
     void SpawnCoin()
     {
+        // Stop spawning if the game is over
+        if (playerControllerScript != null && playerControllerScript.gameOver)
+        {
+            CancelInvoke("SpawnCoin"); // Stop further invokes of SpawnCoin
+            return;
+        }
+
         // Ensure we have a player reference before spawning coins
         if (playerTransform == null) return;
 

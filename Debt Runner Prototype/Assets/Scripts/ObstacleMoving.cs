@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObstacleMoving : MonoBehaviour
 {
     [SerializeField] private float speed = 30f; // Expose speed to adjust in Inspector
-    private float destroyBound = -10f;          // X-position where the obstacle will be destroyed
+    private float destroyBound = -65f;          // X-position where the obstacle will be destroyed
 
     private PlayerController playerControllerScript;
 
