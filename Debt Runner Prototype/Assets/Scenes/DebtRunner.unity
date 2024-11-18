@@ -206,7 +206,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 469714089}
   serializedVersion: 4
-  m_Mass: 5
+  m_Mass: 5.1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -242,6 +242,9 @@ MonoBehaviour:
   gravityModifier: 1
   isOnGround: 1
   gameOver: 0
+  moneyCount: 0
+  coinCollectSound: {fileID: 0}
+  coinEffect: {fileID: 0}
 --- !u!65 &469714094
 BoxCollider:
   m_ObjectHideFlags: 0
