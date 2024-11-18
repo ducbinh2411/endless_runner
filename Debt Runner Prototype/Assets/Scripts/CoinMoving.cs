@@ -4,7 +4,7 @@ using UnityEngine;
 public class CoinMoving : MonoBehaviour
 {
     [SerializeField] private float speed = 10f;     // Speed at which the coin moves up or down
-    private float destroyBoundY = -10f;             // Y-position where the coin will be destroyed
+    private float destroyBoundZ = -5f;             // Y-position where the coin will be destroyed
 
     private PlayerController playerControllerScript;
 
@@ -34,7 +34,7 @@ public class CoinMoving : MonoBehaviour
         transform.Translate(Vector3.up * speed * Time.deltaTime);
 
         // Destroy the coin if it goes out of bounds on the Y-axis
-        if (transform.position.y < destroyBoundY)
+        if (transform.position.y < destroyBoundZ)
         {
             Destroy(gameObject);
         }

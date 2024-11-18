@@ -6,9 +6,15 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;       // Speed for left and right movement
     public float gravityModifier = 1f; // Gravity modifier to adjust gravity strength
     public bool isOnGround = true;     // Checks if the player is on the ground
-    public bool gameOver = false;
-    private Rigidbody playerRb;        // Rigidbody component of the player
+    public bool gameOver = false;      // Game over state
     internal bool gameStarted;
+
+    public int moneyCount = 0;         // Tracks the player's collected coins
+    public AudioClip coinCollectSound; // Sound effect for coin collection
+    public ParticleSystem coinEffect;  // Particle effect for coin collection
+
+    private Rigidbody playerRb;        // Rigidbody component of the player
+    private AudioSource audioSource;   // Audio source for sound effects
 
     void Start()
     {
@@ -17,6 +23,9 @@ public class PlayerController : MonoBehaviour
 
         // Modify gravity if needed
         Physics.gravity *= gravityModifier;
+
+        // Get the AudioSource component
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -55,9 +64,36 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isOnGround = true;
-        } else if (collision.gameObject.CompareTag("Obstacle")) {
+        }
+        else if (collision.gameObject.CompareTag("Obstacle"))
+        {
             gameOver = true;
             Debug.Log("Game Over!");
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Handle coin collection
+        if (other.CompareTag("Coin"))
+        {
+            moneyCount += 1; // Increment the money counter
+            Debug.Log("Coin collected! Money count: " + moneyCount);
+
+            // Play coin collection sound effect
+            if (coinCollectSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(coinCollectSound);
+            }
+
+            // Instantiate particle effect at the coin's position
+            if (coinEffect != null)
+            {
+                Instantiate(coinEffect, other.transform.position, Quaternion.identity);
+            }
+
+            // Destroy the coin
+            Destroy(other.gameObject);
         }
     }
 }
