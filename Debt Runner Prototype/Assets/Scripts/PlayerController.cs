@@ -15,17 +15,21 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody playerRb;        // Rigidbody component of the player
     private AudioSource audioSource;   // Audio source for sound effects
+    private Animator playerAnim;
 
     void Start()
     {
         // Get the Rigidbody component attached to the player
         playerRb = GetComponent<Rigidbody>();
+        playerAnim = GetComponent<Animator>();
 
         // Modify gravity if needed
         Physics.gravity *= gravityModifier;
 
         // Get the AudioSource component
         audioSource = GetComponent<AudioSource>();
+
+        
     }
 
     void Update()
@@ -35,6 +39,7 @@ public class PlayerController : MonoBehaviour
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
+            playerAnim.SetTrigger("Jump_trig");
         }
 
         // Left and right movement
