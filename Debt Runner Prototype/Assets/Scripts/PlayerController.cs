@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public int moneyCount = 0;         // Tracks the player's collected coins
     public AudioClip coinCollectSound; // Sound effect for coin collection
     public ParticleSystem coinEffect;  // Particle effect for coin collection
+    public ParticleSystem explosionParticle;
 
     private Rigidbody playerRb;        // Rigidbody component of the player
     private AudioSource audioSource;   // Audio source for sound effects
@@ -36,7 +37,7 @@ public class PlayerController : MonoBehaviour
     {
         // Stop all player input if game over
         if (gameOver) return;
-        
+
         // Jumping logic
         if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !gameOver)
         {
@@ -79,6 +80,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Game Over!");
             playerAnim.SetBool("Death_b", true);
             playerAnim.SetInteger("DeathType_int", 1);
+            explosionParticle.Play();
         }
     }
 
