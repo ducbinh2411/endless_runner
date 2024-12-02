@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     public float gravityModifier = 1f; // Gravity modifier to adjust gravity strength
     public bool isOnGround = true;     // Checks if the player is on the ground
     public bool gameOver = false;      // Game over state
+    public AudioClip jumpSound;
+    public AudioClip crashSound;
     internal bool gameStarted;
 
     public int moneyCount = 0;         // Tracks the player's collected coins
@@ -15,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem explosionParticle;
 
     private Rigidbody playerRb;        // Rigidbody component of the player
-    private AudioSource audioSource;   // Audio source for sound effects
+    private AudioSource playerAudio;   // Audio source for sound effects
     private Animator playerAnim;
 
     void Start()
@@ -28,7 +30,7 @@ public class PlayerController : MonoBehaviour
         Physics.gravity *= gravityModifier;
 
         // Get the AudioSource component
-        audioSource = GetComponent<AudioSource>();
+        playerAudio = GetComponent<AudioSource>();
 
         
     }
@@ -44,6 +46,7 @@ public class PlayerController : MonoBehaviour
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
             playerAnim.SetTrigger("Jump_trig");
+            playerAudio.PlayOneShot(jumpSound, 1.0f);
         }
 
         // Left and right movement
@@ -81,6 +84,7 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetBool("Death_b", true);
             playerAnim.SetInteger("DeathType_int", 1);
             explosionParticle.Play();
+            playerAudio.PlayOneShot(crashSound, 1.0f);
         }
     }
 
@@ -93,9 +97,9 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Coin collected! Money count: " + moneyCount);
 
             // Play coin collection sound effect
-            if (coinCollectSound != null && audioSource != null)
+            if (coinCollectSound != null && playerAudio != null)
             {
-                audioSource.PlayOneShot(coinCollectSound);
+                playerAudio.PlayOneShot(coinCollectSound);
             }
 
             // Instantiate particle effect at the coin's position
