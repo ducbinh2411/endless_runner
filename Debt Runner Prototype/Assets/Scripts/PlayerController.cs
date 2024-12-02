@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -5,6 +6,7 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10f;      // Force applied to the player for jumping
     public float moveSpeed = 5f;       // Speed for left and right movement
     public float gravityModifier = 1f; // Gravity modifier to adjust gravity strength
+    public float xRange = 10f;          // Range limit for left and right movement
     public bool isOnGround = true;     // Checks if the player is on the ground
     public bool gameOver = false;      // Game over state
     public AudioClip jumpSound;
@@ -31,8 +33,6 @@ public class PlayerController : MonoBehaviour
 
         // Get the AudioSource component
         playerAudio = GetComponent<AudioSource>();
-
-        
     }
 
     void Update()
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         if (gameOver) return;
 
         // Jumping logic
-        if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !gameOver)
+        if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
@@ -66,6 +66,10 @@ public class PlayerController : MonoBehaviour
         if (moveDirection != 0f)
         {
             Vector3 newPosition = playerRb.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
+
+            // Clamp the player's X position within the specified range
+            newPosition.x = Mathf.Clamp(newPosition.x, -xRange, xRange);
+
             playerRb.MovePosition(newPosition);
         }
     }
