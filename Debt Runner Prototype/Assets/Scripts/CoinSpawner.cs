@@ -3,7 +3,7 @@ using UnityEngine;
 public class CoinSpawner : MonoBehaviour
 {
     public GameObject coinPrefab;               // The coin prefab to spawn
-    public float spawnInterval = 10f;           // Time interval between coin spawns
+    public float spawnInterval = 12f;           // Time interval between coin spawns
     public float spawnRangeX = 5f;              // Range on the X-axis for random spawn positions
     public float minSpawnDistanceZ = 10f;       // Minimum distance in front of the player to avoid close spawns
     public float maxSpawnDistanceZ = 45f;       // Maximum distance in front of the player to spawn coins
