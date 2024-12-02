@@ -113,10 +113,10 @@ public class SpawnManager : MonoBehaviour
     {
         if (playerControllerScript != null)
         {
-            // Check if the player's score reaches the next milestone (5, 10, 15, etc.)
-            if (playerControllerScript.moneyCount / 5 > lastMilestone)
+            // Check if the player's score reaches the next milestone (2, 4, 6, etc.)
+            if (playerControllerScript.moneyCount / 2 > lastMilestone)
             {
-                lastMilestone = playerControllerScript.moneyCount / 5; // Update the milestone
+                lastMilestone = playerControllerScript.moneyCount / 2; // Update the milestone
 
                 // Reduce the repeat rate by 10%, but do not go below the minimum repeat rate
                 repeatRate = Mathf.Max(repeatRate * 0.9f, minRepeatRate);
