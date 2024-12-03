@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro; // Required for TextMeshPro
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,17 +9,16 @@ public class PlayerController : MonoBehaviour
     public float xRange = 10f;         // Range limit for left and right movement
     public bool isOnGround = true;     // Checks if the player is on the ground
     public bool gameOver = false;      // Game over state
-    public bool gameWon = false;       // Game won state
     public AudioClip jumpSound;
     public AudioClip crashSound;
-    public AudioClip winSound;         // Sound effect for winning
     internal bool gameStarted;
 
     public int moneyCount = 0;         // Tracks the player's collected coins
-    public int coinsToWin = 10;        // Number of coins needed to win
     public AudioClip coinCollectSound; // Sound effect for coin collection
     public ParticleSystem coinEffect;  // Particle effect for coin collection
     public ParticleSystem explosionParticle;
+
+    public TextMeshProUGUI coinCounterText; // UI Text for displaying coin count
 
     private Rigidbody playerRb;        // Rigidbody component of the player
     private AudioSource playerAudio;   // Audio source for sound effects
@@ -35,13 +35,13 @@ public class PlayerController : MonoBehaviour
 
         // Modify gravity if needed
         Physics.gravity *= gravityModifier;
+
+        // Initialize coin counter UI
+        UpdateCoinCounter();
     }
 
     void Update()
     {
-        // Stop all player input if the game is over or won
-        if (gameOver || gameWon) return;
-
         // Jumping logic
         if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
         {
@@ -109,6 +109,9 @@ public class PlayerController : MonoBehaviour
             moneyCount += 1;
             Debug.Log("Coin collected! Money count: " + moneyCount);
 
+            // Update the coin counter UI
+            UpdateCoinCounter();
+
             // Play coin collection sound effect
             if (coinCollectSound != null && playerAudio != null)
             {
@@ -123,30 +126,14 @@ public class PlayerController : MonoBehaviour
 
             // Destroy the coin
             Destroy(other.gameObject);
-
-            // Check win condition
-            /*if (moneyCount >= coinsToWin)
-            {
-                TriggerWin();
-            }*/
         }
     }
 
-    /*private void TriggerWin()
+    private void UpdateCoinCounter()
     {
-        gameWon = true;
-        Debug.Log("You Win!");
-
-        // Trigger Win state in GameManager
-        if (gameManager != null)
+        if (coinCounterText != null)
         {
-            gameManager.GameWin();
+            coinCounterText.text = "Coins: " + moneyCount;
         }
-
-        playerAnim.SetTrigger("Win_trig");
-        playerAudio.PlayOneShot(winSound, 1.0f);
-
-        // Optionally pause the game
-        Time.timeScale = 0f;
-    }*/
+    }
 }
