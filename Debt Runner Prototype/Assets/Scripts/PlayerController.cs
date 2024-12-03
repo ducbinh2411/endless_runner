@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -6,14 +5,17 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10f;      // Force applied to the player for jumping
     public float moveSpeed = 5f;       // Speed for left and right movement
     public float gravityModifier = 1f; // Gravity modifier to adjust gravity strength
-    public float xRange = 10f;          // Range limit for left and right movement
+    public float xRange = 10f;         // Range limit for left and right movement
     public bool isOnGround = true;     // Checks if the player is on the ground
     public bool gameOver = false;      // Game over state
+    public bool gameWon = false;       // Game won state
     public AudioClip jumpSound;
     public AudioClip crashSound;
+    public AudioClip winSound;         // Sound effect for winning
     internal bool gameStarted;
 
     public int moneyCount = 0;         // Tracks the player's collected coins
+    public int coinsToWin = 10;        // Number of coins needed to win
     public AudioClip coinCollectSound; // Sound effect for coin collection
     public ParticleSystem coinEffect;  // Particle effect for coin collection
     public ParticleSystem explosionParticle;
@@ -21,24 +23,24 @@ public class PlayerController : MonoBehaviour
     private Rigidbody playerRb;        // Rigidbody component of the player
     private AudioSource playerAudio;   // Audio source for sound effects
     private Animator playerAnim;
+    private GameManager gameManager;   // Reference to GameManager for game state control
 
     void Start()
     {
-        // Get the Rigidbody component attached to the player
+        // Get components
         playerRb = GetComponent<Rigidbody>();
         playerAnim = GetComponent<Animator>();
+        playerAudio = GetComponent<AudioSource>();
+        gameManager = FindObjectOfType<GameManager>();
 
         // Modify gravity if needed
         Physics.gravity *= gravityModifier;
-
-        // Get the AudioSource component
-        playerAudio = GetComponent<AudioSource>();
     }
 
     void Update()
     {
-        // Stop all player input if game over
-        if (gameOver) return;
+        // Stop all player input if the game is over or won
+        if (gameOver || gameWon) return;
 
         // Jumping logic
         if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
@@ -85,6 +87,13 @@ public class PlayerController : MonoBehaviour
         {
             gameOver = true;
             Debug.Log("Game Over!");
+
+            // Trigger Game Over in GameManager
+            if (gameManager != null)
+            {
+                gameManager.GameOver();
+            }
+
             playerAnim.SetBool("Death_b", true);
             playerAnim.SetInteger("DeathType_int", 1);
             explosionParticle.Play();
@@ -97,7 +106,7 @@ public class PlayerController : MonoBehaviour
         // Handle coin collection
         if (other.CompareTag("Coin"))
         {
-            moneyCount += 1; // Increment the money counter
+            moneyCount += 1;
             Debug.Log("Coin collected! Money count: " + moneyCount);
 
             // Play coin collection sound effect
@@ -114,6 +123,30 @@ public class PlayerController : MonoBehaviour
 
             // Destroy the coin
             Destroy(other.gameObject);
+
+            // Check win condition
+            /*if (moneyCount >= coinsToWin)
+            {
+                TriggerWin();
+            }*/
         }
     }
+
+    /*private void TriggerWin()
+    {
+        gameWon = true;
+        Debug.Log("You Win!");
+
+        // Trigger Win state in GameManager
+        if (gameManager != null)
+        {
+            gameManager.GameWin();
+        }
+
+        playerAnim.SetTrigger("Win_trig");
+        playerAudio.PlayOneShot(winSound, 1.0f);
+
+        // Optionally pause the game
+        Time.timeScale = 0f;
+    }*/
 }
