@@ -55,11 +55,11 @@ public class PlayerController : MonoBehaviour
         float moveDirection = 0f;
 
         // Check if 'A' or 'D' is pressed and set move direction
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             moveDirection = -1f;  // Move left
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             moveDirection = 1f;   // Move right
         }
